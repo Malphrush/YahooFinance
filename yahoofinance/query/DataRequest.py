@@ -1,10 +1,26 @@
-import requests as req
+import requests
 from requests.exceptions import HTTPError
 
 
 class DataFetchException(Exception):
     def __init__(self, msg=""):
         super(DataFetchException, self).__init__(msg)
+
+
+class MissingDataException(DataFetchException):
+    def __init__(self, missing_values):
+        msg = 'The following values were missing in the response: ' + ', '.join(missing_values)
+        super(MissingDataException, self).__init__(msg)
+
+
+class DataTimeoutError(DataFetchException):
+    def __init__(self, time=None, additional_msg=None):
+        msg = 'Timeout'
+        if time:
+            msg += f'({time} when fetching data)'
+        if additional_msg:
+            msg += f' {additional_msg}'
+        super(DataTimeoutError, self).__init__(additional_msg)
 
 
 class HistDataRequest:
@@ -23,7 +39,7 @@ class HistDataRequest:
         :return: returns the bytes of the HTTP response returned after requesting the stocks historical data
         """
         if self.invalid or self.__resp__ is None:
-            response = req.get(self.__url__)
+            response = requests.get(self.__url__)
             try:
                 response.raise_for_status()
             except HTTPError as httperr:

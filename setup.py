@@ -162,5 +162,8 @@ setup(
     license='MIT License',
     author='Henry Malphrus',
     author_email='',
-    description='Program for getting and plotting historical stock data from Yahoo Finance'
+    description='Program for getting and plotting historical stock data from Yahoo Finance', install_requires=['pandas',
+                                                                                                               'beautifulsoup4',
+                                                                                                               'requests',
+                                                                                                               'matplotlib']
 )
